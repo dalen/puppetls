@@ -37,6 +37,7 @@ Puppet::Face.define(:ls, '0.0.1') do
         filepath = (file[:path] || file.title)
         rel_path = filepath[path.length + 1 .. - 1]
         if not options[:recursive]
+          next if rel_path.nil?
           next if rel_path.split(File::SEPARATOR).length > 1
         end
         if filepath.start_with? path
