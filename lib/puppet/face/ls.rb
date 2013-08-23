@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'puppet/face'
 
 Puppet::Face.define(:ls, '0.0.1') do
