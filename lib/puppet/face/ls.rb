@@ -19,6 +19,9 @@ Puppet::Face.define(:ls, '1.0.0') do
       The source of the catalog can be managed with the `--catalog_terminus` and
       the `--catalog_cache_terminus` option.
     EOT
+    notes <<-'EOT'
+      To be able to specify the -r option without a path you need to specify the
+      subcommand as well: `puppet ls list -r`
     EOT
     returns <<-'EOT'
       Nothing.
