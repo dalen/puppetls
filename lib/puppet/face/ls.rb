@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'puppet/face'
+require 'puppet/resource/catalog'
 
 Puppet::Face.define(:ls, '1.0.0') do
   extend Puppet::Util::Colors
@@ -15,24 +16,26 @@ Puppet::Face.define(:ls, '1.0.0') do
     summary "List files and directories"
     description <<-'EOT'
       Reads and lists file resources from the catalog.
-      The source of the catalog can be managed with the `--terminus` option.
+      The source of the catalog can be managed with the `--catalog_terminus` and
+      the `--catalog_cache_terminus` option.
+    EOT
     EOT
     returns <<-'EOT'
       Nothing.
     EOT
     arguments "[<path>]"
-    option "--recursive", "-r"
-    option "--terminus"
+    option "--recursive", "-r" do
+      summary 'Recursively list files and directories'
+    end
     when_invoked do |*args|
-      if args.length > 1
-        path = File.expand_path args[0]
-        options = args[1]
-      else
+      options = args.pop
+      if args.empty?
         path = Dir.pwd
-        options = args[0]
+      else
+        path = File.expand_path args.pop
       end
       path = path[0..-2] if path.end_with? File::SEPARATOR
-      catalog = Puppet::Face[:catalog, '0.0.1'].find(Puppet[:certname], {:terminus => options[:terminus] || :json})
+      catalog = Puppet::Resource::Catalog.indirection.find(Puppet[:certname])
 
       catalog.filter { |r| r.type != 'File' }.resources.sort do |x,y|
         (x[:path] || x.title) <=> (y[:path] || y.title)
