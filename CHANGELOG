@@ -1,0 +1,11 @@
+1.0.0:
+ * Colorize output based on ensure parameter
+ * Only print content parameter if we actually had one
+ * Print link targets
+ * Print file permissions
+
+0.2.0:
+ * Fix bug with trailing slash on paths
+
+0.1.0:
+ * Initial release
