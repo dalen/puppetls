@@ -67,7 +67,9 @@ Puppet::Face.define(:ls, '1.0.0') do
           description = "content from #{source}" unless source.nil?
         end
 
-        puts "#{colorize(color, rel_path)}\n  declared in #{file.file}:#{file.line}\n"
+        puts colorize(color, rel_path)
+        puts "  #{file.file}:#{file.line}\n"
+        puts "  #{file[:owner]||'undef'}:#{file[:group]||'undef'} #{file[:mode]}"
         puts "  #{description}" if description
       end
     nil
