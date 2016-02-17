@@ -1,0 +1,12 @@
+{
+  "name": "dalen-puppetls",
+  "version": "1.0.0",
+  "author": "Erik Dalen",
+  "summary": "Puppet face to list file resources.",
+  "license": "Apache-2.0",
+  "source": "https://github.com/dalen/puppetls",
+  "project_page": "https://github.com/dalen/puppetls",
+  "issues_url": "https://github.com/dalen/puppetls/issues",
+  "dependencies": [],
+  "data_provider": null
+}

@@ -2,10 +2,13 @@
 
 require 'puppet/face'
 
-Puppet::Face.define(:ls, '0.0.1') do
-  license "Apache 2"
-  copyright "Erik Dalén", 2013
+Puppet::Face.define(:ls, '1.0.0') do
+  extend Puppet::Util::Colors
+
+  license "Apache-2.0"
+  copyright "Erik Dalén", 2016
   author "Erik Dalén <erik.gustav.dalen@gmail.com>"
+
   summary "List files managed by Puppet"
   action :list do
     default
