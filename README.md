@@ -13,3 +13,7 @@ $ puppet ls /etc
 $ puppet ls /etc -r
 
 ...lists file resources under /etc
+
+$ puppet ls
+
+...lists file resources in current directory
