@@ -45,33 +45,30 @@ Puppet::Face.define(:ls, '1.0.0') do
         (x[:path] || x.title) <=> (y[:path] || y.title)
       end.each do |file|
         filepath = (file[:path] || file.title)
+        next unless filepath.start_with? path
         rel_path = filepath[path.length + 1 .. - 1]
-        if not options[:recursive]
-          next if rel_path.nil?
-          next if rel_path.split(File::SEPARATOR).length > 1
-        end
-        if filepath.start_with? path
-          description = nil
-          case file[:ensure]
-          when 'directory'
-            color = :blue
-            description = "content from #{file[:source]}" unless file[:source].nil?
-          when 'link'
-            color = :cyan
-            description = "link target: #{file[:target]}"
-          when 'absent'
-            color = :red
-            description = 'GETS REMOVED'
-          else
-            color = :reset
-            source = file[:source]
-            source = 'a "content" parameter' if file[:content]
-            description = "content from #{source}" unless source.nil?
-          end
+        next if rel_path.split(File::SEPARATOR).length > 1 && !options[:recursive]
 
-          puts "#{colorize(color, rel_path)}\n  declared in #{file.file}:#{file.line}\n"
-          puts "  #{description}" if description
+        description = nil
+        case file[:ensure]
+        when 'directory'
+          color = :blue
+          description = "content from #{file[:source]}" unless file[:source].nil?
+        when 'link'
+          color = :cyan
+          description = "link target: #{file[:target]}"
+        when 'absent'
+          color = :red
+          description = 'GETS REMOVED'
+        else
+          color = :reset
+          source = file[:source]
+          source = 'a "content" parameter' if file[:content]
+          description = "content from #{source}" unless source.nil?
         end
+
+        puts "#{colorize(color, rel_path)}\n  declared in #{file.file}:#{file.line}\n"
+        puts "  #{description}" if description
       end
     nil
     end
