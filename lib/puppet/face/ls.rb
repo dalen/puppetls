@@ -2,6 +2,7 @@
 
 require 'puppet/face'
 require 'puppet/resource/catalog'
+require 'puppet/util/colors'
 
 Puppet::Face.define(:ls, '1.0.0') do
   extend Puppet::Util::Colors
@@ -50,15 +51,26 @@ Puppet::Face.define(:ls, '1.0.0') do
           next if rel_path.split(File::SEPARATOR).length > 1
         end
         if filepath.start_with? path
-          if file[:ensure] == 'absent'
+          description = nil
+          case file[:ensure]
+          when 'directory'
+            color = :blue
+            description = "content from #{file[:source]}" unless file[:source].nil?
+          when 'link'
+            color = :cyan
+            description = "link target: #{file[:target]}"
+          when 'absent'
+            color = :red
             description = 'GETS REMOVED'
           else
+            color = :reset
             source = file[:source]
-            source = 'a "content" parameter' if source.nil? or source.empty?
-            description = "content from #{source}"
+            source = 'a "content" parameter' if file[:content]
+            description = "content from #{source}" unless source.nil?
           end
 
-          puts "#{rel_path}\n  declared in #{file.file}:#{file.line}\n  #{description}"
+          puts "#{colorize(color, rel_path)}\n  declared in #{file.file}:#{file.line}\n"
+          puts "  #{description}" if description
         end
       end
     nil
