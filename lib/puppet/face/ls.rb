@@ -7,14 +7,14 @@ require 'puppet/util/colors'
 Puppet::Face.define(:ls, '1.0.0') do
   extend Puppet::Util::Colors
 
-  license "Apache-2.0"
-  copyright "Erik Dalén", 2016
-  author "Erik Dalén <erik.gustav.dalen@gmail.com>"
+  license 'Apache-2.0'
+  copyright 'Erik Dalén', 2016
+  author 'Erik Dalén <erik.gustav.dalen@gmail.com>'
 
-  summary "List files managed by Puppet"
+  summary 'List files managed by Puppet'
   action :list do
     default
-    summary "List files and directories"
+    summary 'List files and directories'
     description <<-'EOT'
       Reads and lists file resources from the catalog.
       The source of the catalog can be managed with the `--catalog_terminus` and
@@ -27,9 +27,12 @@ Puppet::Face.define(:ls, '1.0.0') do
     returns <<-'EOT'
       Nothing.
     EOT
-    arguments "[<path>]"
-    option "--recursive", "-r" do
+    arguments '[<path>]'
+    option '--recursive', '-r' do
       summary 'Recursively list files and directories'
+    end
+    option '--quiet', '-q' do
+      summary 'Limits output to just the path of the managed resource'
     end
     when_invoked do |*args|
       options = args.pop
@@ -68,9 +71,11 @@ Puppet::Face.define(:ls, '1.0.0') do
         end
 
         puts colorize(color, rel_path)
-        puts "  #{file.file}:#{file.line}\n"
-        puts "  #{file[:owner]||'undef'}:#{file[:group]||'undef'} #{file[:mode]}"
-        puts "  #{description}" if description
+        unless options[:quiet]
+          puts "  #{file.file}:#{file.line}\n"
+          puts "  #{file[:owner]||'undef'}:#{file[:group]||'undef'} #{file[:mode]}"
+          puts "  #{description}" if description
+        end
       end
     nil
     end
